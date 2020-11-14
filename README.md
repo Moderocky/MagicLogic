@@ -11,3 +11,21 @@ As it extends from a JDK class, it gains the speed 'cheat' advantage that JDK cl
 Also contained in this are some array transformers, backers and handlers for array-based collections.
 
 This has a soft-dependency of [Overlord](https://github.com/Moderocky/Overlord) for unsafe modifications.
+
+### Maven Information
+```xml
+<repository>
+    <id>pan-repo</id>
+    <name>Pandaemonium Repository</name>
+    <url>https://gitlab.com/api/v4/projects/18568066/packages/maven</url>
+</repository>
+``` 
+
+```xml
+<dependency>
+    <groupId>mx.kenzie</groupId>
+    <artifactId>magiclogic</artifactId>
+    <version>4.0.0</version>
+    <scope>compile</scope>
+</dependency>
+```

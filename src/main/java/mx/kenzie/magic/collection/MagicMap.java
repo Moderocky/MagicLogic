@@ -39,6 +39,14 @@ public class MagicMap<K, V> extends LinkedHashMap<K, V> {
         return map;
     }
 
+    public boolean removeIf(Predicate<? super K> filter) {
+        int a = size();
+        for (K key : new ArrayList<>(keySet())) {
+            if (filter.test(key)) remove(key);
+        }
+        return size() != a;
+    }
+
     public boolean removeEntryIf(Predicate<? super Map.Entry<? super K, ? super V>> filter) {
         return entrySet().removeIf(filter);
     }
