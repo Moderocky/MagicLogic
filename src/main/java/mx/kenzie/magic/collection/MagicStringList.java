@@ -26,6 +26,7 @@ public class MagicStringList extends MagicList<String> {
     }
 
     public static MagicStringList from(final Collection<?> collection) {
+        if (collection == null) return new MagicStringList();
         MagicStringList list = new MagicStringList();
         for (Object o : collection) {
             list.add(o.toString());
@@ -75,6 +76,20 @@ public class MagicStringList extends MagicList<String> {
     public boolean anyContains(final String string) {
         for (String s : this) {
             if (s.contains(string)) return true;
+        }
+        return false;
+    }
+    
+    public boolean allMatch(final Pattern pattern) {
+        for (String s : this) {
+            if (!pattern.matcher(s).matches()) return false;
+        }
+        return true;
+    }
+    
+    public boolean anyMatch(final Pattern pattern) {
+        for (String s : this) {
+            if (pattern.matcher(s).matches()) return true;
         }
         return false;
     }

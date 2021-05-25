@@ -69,16 +69,37 @@ public interface MagicArrayList<T> extends Collection<T>, List<T>, RandomAccess,
         this.forEach(action);
         return this;
     }
-
+    
+    default <Q> MagicArrayList<T> forAllAnd(Q input, BiConsumer<? super T, Q> action) {
+        forAll(input, action);
+        return this;
+    }
+    
+    default <Q> MagicArrayList<T> forAllAndR(Q input, BiConsumer<Q, T> action) {
+        forAllR(input, action);
+        return this;
+    }
+    
+    default <Q> Q forAllAndReturn(Q input, BiConsumer<? super T, Q> action) {
+        forAll(input, action);
+        return input;
+    }
+    
+    default <Q> Q forAllAndReturnR(Q input, BiConsumer<Q, T> action) {
+        forAllR(input, action);
+        return input;
+    }
+    
     default <Q> void forAll(Q input, BiConsumer<? super T, Q> action) {
         for (T t : this) {
             action.accept(t, input);
         }
     }
 
-    default <Q> MagicArrayList<T> forAllAnd(Q input, BiConsumer<? super T, Q> action) {
-        forAll(input, action);
-        return this;
+    default <Q> void forAllR(Q input, BiConsumer<Q, ? super T> action) {
+        for (T t : this) {
+            action.accept(input, t);
+        }
     }
 
     @Override

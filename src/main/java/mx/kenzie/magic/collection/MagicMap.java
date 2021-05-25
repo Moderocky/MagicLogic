@@ -1,8 +1,14 @@
 package mx.kenzie.magic.collection;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import mx.kenzie.magic.magic.JsonMapper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class MagicMap<K, V> extends LinkedHashMap<K, V> {
@@ -153,5 +159,13 @@ public class MagicMap<K, V> extends LinkedHashMap<K, V> {
 
     public boolean retainAll(@NotNull Collection<?> c) {
         return this.entrySet().retainAll(c);
+    }
+    
+    public JsonObject toJsonObject() {
+        return JsonMapper.MAPPER.toJsonObject(this);
+    }
+    
+    public JsonObject toJsonObject(Function<V, JsonElement> converter) {
+        return JsonMapper.MAPPER.toJsonObject(this, converter);
     }
 }

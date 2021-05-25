@@ -25,7 +25,7 @@ This has a soft-dependency of [Overlord](https://github.com/Moderocky/Overlord) 
 <dependency>
     <groupId>mx.kenzie</groupId>
     <artifactId>magiclogic</artifactId>
-    <version>4.0.0</version>
+    <version>4.0.1</version>
     <scope>compile</scope>
 </dependency>
 ```

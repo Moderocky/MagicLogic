@@ -83,15 +83,36 @@ public interface MagicCollection<E> extends Collection<E> {
         this.forEach(action);
         return this;
     }
-
+    
     default <Q> MagicCollection<E> forAllAnd(Q input, BiConsumer<? super E, Q> action) {
         forAll(input, action);
         return this;
     }
 
+    default <Q> MagicCollection<E> forAllAndR(Q input, BiConsumer<Q, E> action) {
+        forAllR(input, action);
+        return this;
+    }
+    
+    default <Q> Q forAllAndReturn(Q input, BiConsumer<? super E, Q> action) {
+        forAll(input, action);
+        return input;
+    }
+    
+    default <Q> Q forAllAndReturnR(Q input, BiConsumer<Q, E> action) {
+        forAllR(input, action);
+        return input;
+    }
+    
     default <Q> void forAll(Q input, BiConsumer<? super E, Q> action) {
         for (E E : this) {
             action.accept(E, input);
+        }
+    }
+    
+    default <Q> void forAllR(Q input, BiConsumer<Q, ? super E> action) {
+        for (E E : this) {
+            action.accept(input, E);
         }
     }
 

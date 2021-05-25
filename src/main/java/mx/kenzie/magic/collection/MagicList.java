@@ -1,14 +1,16 @@
 package mx.kenzie.magic.collection;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import mx.kenzie.magic.magic.GenericCapture;
+import mx.kenzie.magic.magic.JsonMapper;
 import mx.kenzie.magic.magic.UnsafeModifier;
 import mx.kenzie.magic.note.Unsafe;
 
 import java.lang.reflect.Array;
 import java.util.*;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.function.*;
 import java.util.stream.Collectors;
 
 /**
@@ -50,6 +52,7 @@ public class MagicList<T> extends ArrayList<T> implements MagicArrayList<T> {
     }
 
     public static MagicStringList from(Iterable<?> iterable) {
+        if (iterable == null) return new MagicStringList();
         MagicStringList list = new MagicStringList();
         for (Object element : iterable) {
             if (element != null)
@@ -59,6 +62,7 @@ public class MagicList<T> extends ArrayList<T> implements MagicArrayList<T> {
     }
 
     public static <T, Q> MagicList<T> from(Iterable<Q> iterable, Function<Q, T> converter) {
+        if (iterable == null || converter == null) return new MagicList<>();
         MagicList<T> list = new MagicList<>();
         for (Q element : iterable) {
             list.add(converter.apply(element));
@@ -199,7 +203,25 @@ public class MagicList<T> extends ArrayList<T> implements MagicArrayList<T> {
         Collections.reverse(list);
         return list.stream().filter(t -> function.apply(t, sample)).findFirst().orElse(null);
     }
-
+    
+    @Override
+    public MagicList<T> forEachAnd(Consumer<? super T> action) {
+        this.forEach(action);
+        return this;
+    }
+    
+    @Override
+    public <Q> MagicList<T> forAllAnd(Q input, BiConsumer<? super T, Q> action) {
+        forAll(input, action);
+        return this;
+    }
+    
+    @Override
+    public <Q> MagicList<T> forAllAndR(Q input, BiConsumer<Q, T> action) {
+        forAllR(input, action);
+        return this;
+    }
+    
     @Override
     public <Q> MagicList<Q> castConvert(Class<Q> cls) {
         return castConvert();
@@ -240,10 +262,6 @@ public class MagicList<T> extends ArrayList<T> implements MagicArrayList<T> {
         assert modifier != null;
         return this.collect(modifier::shallowCopy);
     }
-
-    //    public <Q extends Number> MagicNumberList<Q> asMagicNumbers() {
-//        return new MagicNumberList<>((MagicList<Q>) this);
-//    }
 
     @Override
     @Unsafe("Object transformations are *very* dangerous.")
@@ -333,6 +351,18 @@ public class MagicList<T> extends ArrayList<T> implements MagicArrayList<T> {
     @Override
     public Class<T> getComponentType() {
         return new GenericCapture<>(this).getType();
+    }
+    
+    public JsonArray toJsonStringArray() {
+        return JsonMapper.MAPPER.toJsonStringArray(this);
+    }
+    
+    public JsonArray toJsonArray(Function<T, JsonElement> converter) {
+        return JsonMapper.MAPPER.toJsonArray(this, converter);
+    }
+    
+    public JsonArray toJsonArray() {
+        return JsonMapper.MAPPER.toJsonArray(this);
     }
 
 }
